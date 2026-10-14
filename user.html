@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My dashboard | Stackly Foundation</title>
+<link rel="icon" href="./stackly.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* ==========================================================
+       Stackly Foundation - user.html styles
+       class prefix: stackly-user-
+       ========================================================== */
+
+    :root{
+        --bg:#071b1e;
+        --bg2:#0d4440;
+        --ac:#ffc83d;
+        --ac2:#2bb39b;
+        --tx:#eef7f5;
+        --mut:#9fbab5;
+        --card:rgba(255,255,255,.06);
+        --bd:rgba(255,255,255,.12);
+        --r:16px;
+        --teal:#22c3a6;
+        --onac:#2a1e00;
+        --bad:#ff9d9d;
+    }
+
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+
+    html{
+        scroll-behavior:smooth;
+    }
+
+    body{
+        font:16px/1.6 Figtree,system-ui,sans-serif;
+        background:var(--bg);
+        color:var(--tx);
+        overflow-x:hidden;
+        -webkit-font-smoothing:antialiased;
+    }
+
+    img{
+        max-width:100%;
+        display:block;
+    }
+
+    a{
+        color:inherit;
+        text-decoration:none;
+    }
+
+    ul{
+        list-style:none;
+    }
+
+    [hidden]{
+        display:none!important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4{
+        font-family:'Bricolage Grotesque',Figtree,sans-serif;
+        line-height:1.15;
+        font-weight:800;
+        letter-spacing:-.01em;
+    }
+
+    p,
+    small{
+        color:var(--mut);
+    }
+
+    :focus-visible{
+        outline:2px solid var(--ac);
+        outline-offset:3px;
+    }
+
+    .stackly-user-bg{
+        position:fixed;
+        inset:0;
+        z-index:-1;
+        overflow:hidden;
+        background:radial-gradient(circle at 20% 10%,var(--bg2),var(--bg));
+    }
+
+    .stackly-user-blob{
+        position:absolute;
+        border-radius:50%;
+        filter:blur(90px);
+        opacity:.4;
+        pointer-events:none;
+    }
+
+    .stackly-user-b1{
+        width:46vw;
+        height:46vw;
+        background:var(--ac2);
+        top:-12%;
+        left:-10%;
+    }
+
+    .stackly-user-b2{
+        width:38vw;
+        height:38vw;
+        background:var(--ac);
+        bottom:-10%;
+        right:-8%;
+        opacity:.22;
+    }
+
+    .stackly-user-b3{
+        width:30vw;
+        height:30vw;
+        background:var(--teal);
+        top:40%;
+        left:45%;
+        opacity:.18;
+    }
+
+    .stackly-user-grid-bg{
+        position:absolute;
+        inset:0;
+        background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);
+        background-size:70px 70px;
+        opacity:.3;
+        -webkit-mask-image:radial-gradient(circle,#000 20%,transparent 75%);
+        mask-image:radial-gradient(circle,#000 20%,transparent 75%);
+    }
+
+    .stackly-user-wm{
+        font:800 1.7rem 'Bricolage Grotesque',sans-serif;
+        color:#fff;
+        letter-spacing:-.02em;
+        line-height:1;
+    }
+
+    #pre{
+        position:fixed;
+        inset:0;
+        z-index:9999;
+        background:var(--bg);
+        color:#fff;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:20px;
+    }
+
+    #pre img{
+        height:64px;
+        width:auto;
+        animation:stackly-user-pp 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes stackly-user-pp{
+        to{
+            transform:scale(1.12);
+            opacity:.7;
+        }
+    }
+
+    #pre .stackly-user-pb{
+        width:min(260px,60vw);
+        height:4px;
+        background:#1d4a50;
+        border-radius:4px;
+        overflow:hidden;
+    }
+
+    #pre .stackly-user-pb i{
+        display:block;
+        height:100%;
+        width:0;
+        background:var(--ac);
+    }
+
+    #pre .stackly-user-pt{
+        font:800 1.4rem 'Bricolage Grotesque',sans-serif;
+        color:var(--ac);
+    }
+
+    .stackly-user-toast{
+        position:fixed;
+        left:50%;
+        bottom:28px;
+        transform:translate(-50%,20px);
+        background:#fff;
+        color:#08201f;
+        padding:12px 22px;
+        border-radius:50px;
+        font-weight:700;
+        box-shadow:0 14px 40px rgba(0,0,0,.4);
+        opacity:0;
+        transition:.3s;
+        z-index:9000;
+        max-width:92vw;
+        text-align:center;
+    }
+
+    .stackly-user-toast.stackly-user-show{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+
+    .stackly-user-btn{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding:12px 26px;
+        border-radius:50px;
+        background:var(--ac);
+        color:var(--onac);
+        font:700 .98rem Figtree,sans-serif;
+        border:1px solid transparent;
+        cursor:pointer;
+        transition:transform .2s,box-shadow .2s;
+    }
+
+    .stackly-user-btn:hover{
+        box-shadow:0 10px 26px rgba(255,200,61,.3);
+        transform:translateY(-1px);
+    }
+
+    .stackly-user-btn.stackly-user-ghost{
+        background:transparent;
+        color:var(--tx);
+        border-color:var(--bd);
+    }
+
+    .stackly-user-btn.stackly-user-ghost:hover{
+        border-color:var(--ac);
+        color:var(--ac);
+        box-shadow:none;
+    }
+
+    .stackly-user-btn.stackly-user-sm{
+        padding:6px 16px;
+        font-size:.85rem;
+    }
+
+    @media(prefers-reduced-motion:reduce){
+
+        *{
+            animation:none!important;
+            transition:none!important;
+        }
+
+    }
+
+    .stackly-user-dash{
+        display:grid;
+        grid-template-columns:260px minmax(0,1fr);
+        min-height:100vh;
+    }
+
+    .stackly-user-sidebar{
+        position:sticky;
+        top:0;
+        height:100vh;
+        display:flex;
+        flex-direction:column;
+        padding:22px 16px;
+        background:rgba(7,27,30,.85);
+        backdrop-filter:blur(14px);
+        -webkit-backdrop-filter:blur(14px);
+        border-right:1px solid var(--bd);
+        z-index:50;
+        overflow-y:auto;
+    }
+
+    .stackly-user-slogo{
+        display:inline-flex;
+    }
+
+    .stackly-user-slogo img{
+        height:70px;
+        width:auto;
+        max-width:100%;
+        margin:0 8px 18px;
+    }
+
+    .stackly-user-slogo .stackly-user-wm{
+        margin:0 8px 18px;
+    }
+
+    .stackly-user-suser{
+        display:flex;
+        gap:12px;
+        align-items:center;
+        padding:12px;
+        border-radius:14px;
+        background:var(--card);
+        border:1px solid var(--bd);
+        margin-bottom:18px;
+    }
+
+    .stackly-user-av{
+        width:42px;
+        height:42px;
+        border-radius:50%;
+        background:var(--ac);
+        color:var(--onac);
+        display:grid;
+        place-items:center;
+        font:800 1rem 'Bricolage Grotesque',sans-serif;
+        flex-shrink:0;
+    }
+
+    .stackly-user-sname{
+        font-weight:700;
+        line-height:1.2;
+    }
+
+    .stackly-user-semail{
+        font-size:.8rem;
+        color:var(--mut);
+        word-break:break-all;
+    }
+
+    .stackly-user-sinfo{
+        min-width:0;
+    }
+
+    nav a{
+        display:flex;
+        gap:12px;
+        align-items:center;
+        padding:11px 14px;
+        border-radius:12px;
+        color:var(--mut);
+        font-weight:500;
+        margin-bottom:4px;
+        transition:background .25s,color .25s;
+    }
+
+    nav a:hover,
+    nav a.stackly-user-active{
+        background:rgba(255,200,61,.14);
+        color:var(--ac);
+    }
+
+    nav .stackly-user-ic{
+        width:20px;
+        text-align:center;
+    }
+
+    .stackly-user-sfoot{
+        margin-top:auto;
+        padding-top:16px;
+    }
+
+    .stackly-user-logoutbtn{
+        width:100%;
+        padding:11px;
+        border-radius:50px;
+        border:1px solid var(--bd);
+        background:transparent;
+        color:var(--tx);
+        font:700 1rem Figtree,sans-serif;
+        cursor:pointer;
+        transition:.25s;
+    }
+
+    .stackly-user-logoutbtn:hover{
+        border-color:var(--ac);
+        color:var(--ac);
+    }
+
+    .stackly-user-sidebar-close,
+    .stackly-user-menu-btn,
+    .stackly-user-backdrop{
+        display:none;
+    }
+
+    .stackly-user-main{
+        padding:22px 32px 48px;
+        min-width:0;
+    }
+
+    .stackly-user-topbar{
+        display:flex;
+        align-items:center;
+        gap:16px;
+        margin-bottom:26px;
+    }
+
+    .stackly-user-search{
+        flex:1;
+        max-width:460px;
+    }
+
+    .stackly-user-search input{
+        width:100%;
+        padding:11px 18px;
+        border-radius:50px;
+        border:1px solid var(--bd);
+        background:var(--card);
+        color:var(--tx);
+        font:inherit;
+    }
+
+    .stackly-user-topbar-right{
+        margin-left:auto;
+        display:flex;
+        align-items:center;
+        gap:14px;
+    }
+
+    .stackly-user-bell{
+        position:relative;
+        width:40px;
+        height:40px;
+        border-radius:50%;
+        border:1px solid var(--bd);
+        background:var(--card);
+        display:grid;
+        place-items:center;
+        cursor:pointer;
+        color:inherit;
+    }
+
+    .stackly-user-bell .stackly-user-dot{
+        position:absolute;
+        top:9px;
+        right:10px;
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:var(--ac);
+    }
+
+    .stackly-user-profile-chip{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        padding:5px 14px 5px 5px;
+        border-radius:50px;
+        border:1px solid var(--bd);
+        background:var(--card);
+    }
+
+    .stackly-user-profile-chip .stackly-user-av{
+        width:34px;
+        height:34px;
+        font-size:.9rem;
+    }
+
+    .stackly-user-pname{
+        font-weight:700;
+        font-size:.9rem;
+        line-height:1.2;
+    }
+
+    .stackly-user-prole{
+        font-size:.75rem;
+        color:var(--mut);
+    }
+
+    .stackly-user-pagehead{
+        margin-bottom:22px;
+    }
+
+    h1{
+        font-size:clamp(1.7rem,3.4vw,2.5rem);
+    }
+
+    .stackly-user-pagehead p{
+        margin-top:6px;
+    }
+
+    h3{
+        font-size:1.2rem;
+        margin-bottom:12px;
+    }
+
+    .stackly-user-tabpanel{
+        display:none;
+    }
+
+    .stackly-user-tabpanel.stackly-user-on{
+        display:block;
+    }
+
+    .stackly-user-stat-cards{
+        display:grid;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:16px;
+        margin-bottom:20px;
+    }
+
+    .stackly-user-stat-card,
+    .stackly-user-panel{
+        background:var(--card);
+        border:1px solid var(--bd);
+        border-radius:var(--r);
+        padding:20px;
+        transition:border-color .3s;
+    }
+
+    .stackly-user-stat-card:hover,
+    .stackly-user-panel:hover{
+        border-color:rgba(255,200,61,.5);
+    }
+
+    .stackly-user-ic2{
+        width:40px;
+        height:40px;
+        border-radius:12px;
+        display:grid;
+        place-items:center;
+        color:#06201f;
+        font-weight:700;
+        margin-bottom:12px;
+    }
+
+    .stackly-user-num{
+        font:800 clamp(1.5rem,2.6vw,2.1rem)/1.2 'Bricolage Grotesque',sans-serif;
+    }
+
+    .stackly-user-lbl{
+        color:var(--mut);
+        font-size:.92rem;
+    }
+
+    .stackly-user-dgrid{
+        display:grid;
+        grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
+        gap:18px;
+        margin-bottom:20px;
+    }
+
+    .stackly-user-panel{
+        margin-bottom:20px;
+    }
+
+    .stackly-user-dgrid .stackly-user-panel{
+        margin-bottom:0;
+    }
+
+    .stackly-user-tw{
+        overflow-x:auto;
+    }
+
+    table{
+        width:100%;
+        min-width:480px;
+        border-collapse:collapse;
+    }
+
+    th,
+    td{
+        text-align:left;
+        padding:11px 8px;
+        border-bottom:1px solid var(--bd);
+        font-size:.94rem;
+        vertical-align:top;
+    }
+
+    th{
+        color:var(--mut);
+        font-weight:500;
+    }
+
+    .stackly-user-status{
+        display:inline-block;
+        padding:3px 12px;
+        border-radius:50px;
+        font-size:.82rem;
+        font-weight:700;
+        background:rgba(255,200,61,.15);
+        color:var(--ac);
+    }
+
+    .stackly-user-status.stackly-user-ok{
+        background:rgba(34,195,166,.15);
+        color:var(--teal);
+    }
+
+    .stackly-user-profile-panel{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:14px;
+    }
+
+    .stackly-user-bigav{
+        width:76px;
+        height:76px;
+        border-radius:50%;
+        background:var(--ac);
+        color:var(--onac);
+        display:grid;
+        place-items:center;
+        font:800 1.8rem 'Bricolage Grotesque',sans-serif;
+    }
+
+    .stackly-user-pfield,
+    .stackly-user-kv{
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+        padding:9px 0;
+        border-bottom:1px solid var(--bd);
+        font-size:.94rem;
+    }
+
+    .stackly-user-pfield span:first-child,
+    .stackly-user-kv span{
+        color:var(--mut);
+    }
+
+    .stackly-user-pfield span:last-child,
+    .stackly-user-kv b{
+        text-align:right;
+        word-break:break-word;
+    }
+
+    .stackly-user-grid{
+        display:grid;
+        gap:18px;
+    }
+
+    .stackly-user-g2{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .stackly-user-g3{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .stackly-user-prop{
+        background:var(--card);
+        border:1px solid var(--bd);
+        border-radius:var(--r);
+        padding:18px;
+        transition:border-color .3s,transform .3s;
+    }
+
+    .stackly-user-prop:hover{
+        border-color:var(--ac);
+        transform:translateY(-3px);
+    }
+
+    .stackly-user-prop .stackly-user-tag{
+        color:var(--ac);
+        font-size:.85rem;
+        font-weight:700;
+    }
+
+    .stackly-user-prop h4{
+        margin:4px 0 8px;
+        font-size:1.05rem;
+    }
+
+    .stackly-user-bar{
+        height:9px;
+        background:rgba(255,255,255,.12);
+        border-radius:9px;
+        overflow:hidden;
+        margin:8px 0 6px;
+    }
+
+    .stackly-user-bar i{
+        display:block;
+        height:100%;
+        background:linear-gradient(90deg,var(--ac2),var(--ac));
+        border-radius:9px;
+    }
+
+    .stackly-user-meta{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        margin-top:10px;
+        font-size:.88rem;
+    }
+
+    .stackly-user-form{
+        display:grid;
+        gap:14px;
+    }
+
+    .stackly-user-form label{
+        display:grid;
+        gap:6px;
+        font-weight:700;
+        font-size:.9rem;
+    }
+
+    .stackly-user-row{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+
+    .stackly-user-row3{
+        grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);
+    }
+
+    .stackly-user-form input,
+    .stackly-user-form select,
+    .stackly-user-form textarea,
+    .stackly-user-dash input[type=number]{
+        width:100%;
+        padding:12px 16px;
+        border-radius:14px;
+        border:1px solid var(--bd);
+        background:var(--card);
+        color:var(--tx);
+        font:inherit;
+    }
+
+    .stackly-user-form select option{
+        background:#0d2a2c;
+    }
+
+    .stackly-user-form input:focus,
+    .stackly-user-form select:focus,
+    .stackly-user-form textarea:focus{
+        outline:0;
+        border-color:var(--ac);
+    }
+
+    .stackly-user-form .stackly-user-btn{
+        justify-self:start;
+    }
+
+    .stackly-user-msg{
+        min-height:1.4em;
+        font-weight:700;
+        color:var(--teal);
+    }
+
+    .stackly-user-chips{
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+    }
+
+    .stackly-user-chip{
+        padding:7px 16px;
+        border-radius:50px;
+        border:1px solid var(--bd);
+        background:transparent;
+        color:var(--tx);
+        cursor:pointer;
+        font:700 .9rem Figtree,sans-serif;
+    }
+
+    .stackly-user-chip:hover{
+        border-color:var(--ac);
+        color:var(--ac);
+    }
+
+    .stackly-user-empty{
+        padding:22px 8px;
+        color:var(--mut);
+    }
+
+    .stackly-user-empty a{
+        color:var(--ac);
+        font-weight:700;
+        text-decoration:underline;
+    }
+
+    .stackly-user-head{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+        flex-wrap:wrap;
+        margin-bottom:12px;
+    }
+
+    .stackly-user-head h3{
+        margin:0;
+    }
+
+    @media(max-width:1100px){
+
+        .stackly-user-stat-cards{
+            grid-template-columns:repeat(2,minmax(0,1fr));
+        }
+
+        .stackly-user-dgrid{
+            grid-template-columns:1fr;
+        }
+
+        .stackly-user-g3{
+            grid-template-columns:repeat(2,minmax(0,1fr));
+        }
+
+    }
+
+    @media(max-width:900px){
+
+        .stackly-user-dash{
+            grid-template-columns:1fr;
+        }
+
+        .stackly-user-sidebar{
+            position:fixed;
+            left:0;
+            top:0;
+            width:270px;
+            transform:translateX(-102%);
+            transition:transform .3s;
+        }
+
+        .stackly-user-sidebar.stackly-user-open{
+            transform:none;
+        }
+
+        .stackly-user-menu-btn{
+            display:grid;
+            place-items:center;
+            width:40px;
+            height:40px;
+            border-radius:12px;
+            border:1px solid var(--bd);
+            background:var(--card);
+            color:var(--tx);
+            font-size:1.2rem;
+            cursor:pointer;
+        }
+
+        .stackly-user-sidebar-close{
+            display:block;
+            align-self:flex-end;
+            background:none;
+            border:0;
+            color:var(--tx);
+            font-size:1.3rem;
+            cursor:pointer;
+        }
+
+        .stackly-user-backdrop.stackly-user-show{
+            display:block;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.55);
+            z-index:40;
+        }
+
+        .stackly-user-main{
+            padding:18px 18px 40px;
+        }
+
+        .stackly-user-pname,
+        .stackly-user-prole{
+            display:none;
+        }
+
+        .stackly-user-profile-chip{
+            padding:5px;
+        }
+
+    }
+
+    @media(max-width:600px){
+
+        .stackly-user-stat-cards,
+        .stackly-user-g2,
+        .stackly-user-g3,
+        .stackly-user-row,
+        .stackly-user-row3{
+            grid-template-columns:1fr;
+        }
+
+        .stackly-user-topbar{
+            flex-wrap:wrap;
+        }
+
+        .stackly-user-search{
+            order:3;
+            flex-basis:100%;
+            max-width:none;
+        }
+
+        .stackly-user-bell{
+            display:none;
+        }
+
+    }
+
+    .stackly-user-sbrand{
+        margin:-6px 8px 16px;
+        display:grid;
+        gap:2px;
+    }
+
+    .stackly-user-sbt{
+        font:800 1.05rem 'Bricolage Grotesque',sans-serif;
+        line-height:1.2;
+    }
+
+    .stackly-user-sbs{
+        font-size:.72rem;
+        font-weight:700;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+        color:var(--ac);
+    }
+
+    .stackly-user-srole{
+        display:inline-block;
+        margin-top:3px;
+        font-size:.68rem;
+        font-weight:700;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        color:var(--ac);
+    }
+
+    .stackly-user-nlabel{
+        padding:14px 14px 6px;
+        font-size:.7rem;
+        font-weight:700;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:var(--mut);
+        opacity:.75;
+    }
+
+    .stackly-user-nlabel:first-child{
+        padding-top:2px;
+    }
+
+    .stackly-user-row,
+    .stackly-user-row3{
+        min-width:0;
+    }
+
+    .stackly-user-row>*,
+    .stackly-user-row3>*{
+        min-width:0;
+    }
+
+    .stackly-user-form select{
+        min-width:0;
+        max-width:100%;
+        text-overflow:ellipsis;
+    }
+
+    .stackly-user-ddnative{
+        position:absolute!important;
+        width:1px!important;
+        height:1px!important;
+        opacity:0!important;
+        pointer-events:none!important;
+        overflow:hidden;
+    }
+
+    .stackly-user-dd{
+        position:relative;
+        min-width:0;
+    }
+
+    .stackly-user-ddb{
+        width:100%;
+        min-width:0;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:12px 16px;
+        border-radius:14px;
+        border:1px solid var(--bd);
+        background:var(--card);
+        color:var(--tx);
+        font:inherit;
+        font-weight:700;
+        text-align:left;
+        cursor:pointer;
+        transition:border-color .2s;
+    }
+
+    .stackly-user-ddb span{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    .stackly-user-ddb i{
+        font-style:normal;
+        font-size:.7rem;
+        color:var(--mut);
+        transition:transform .2s;
+        flex-shrink:0;
+    }
+
+    .stackly-user-dd.stackly-user-open .stackly-user-ddb,
+    .stackly-user-ddb:focus-visible{
+        border-color:var(--ac);
+        outline:0;
+    }
+
+    .stackly-user-dd.stackly-user-open .stackly-user-ddb i{
+        transform:rotate(180deg);
+    }
+
+    .stackly-user-ddl{
+        position:absolute;
+        left:0;
+        right:0;
+        top:calc(100% + 6px);
+        max-height:240px;
+        overflow-y:auto;
+        overscroll-behavior:contain;
+        margin:0;
+        padding:6px;
+        border-radius:14px;
+        background:#0d2a2c;
+        border:1px solid var(--bd);
+        box-shadow:0 18px 44px rgba(0,0,0,.55);
+        z-index:70;
+        display:none;
+        list-style:none;
+    }
+
+    .stackly-user-dd.stackly-user-open .stackly-user-ddl{
+        display:block;
+    }
+
+    .stackly-user-dd.stackly-user-up .stackly-user-ddl{
+        top:auto;
+        bottom:calc(100% + 6px);
+    }
+
+    .stackly-user-ddl li{
+        padding:10px 12px;
+        border-radius:10px;
+        cursor:pointer;
+        font-weight:500;
+        color:var(--tx);
+    }
+
+    .stackly-user-ddl li:hover,
+    .stackly-user-ddl li.stackly-user-hl{
+        background:rgba(255,200,61,.14);
+        color:var(--ac);
+    }
+
+    .stackly-user-ddl li[aria-selected=true]{
+        font-weight:700;
+        color:var(--ac);
+    }
+</style>
+</head>
+<body>
+
+    <!-- ============ PRELOADER ============ -->
+
+    <div
+        id="pre"
+        role="status"
+        aria-label="Loading"
+    >
+
+        <img
+            src="./stackly.png"
+            alt="Stackly"
+        />
+
+        <div class="stackly-user-pb"><i></i></div>
+
+        <div class="stackly-user-pt"><span id="pn">0</span>%</div>
+
+    </div>
+
+    <!-- ============ BACKGROUND ============ -->
+
+    <div class="stackly-user-bg">
+
+        <i class="stackly-user-blob stackly-user-b1"></i>
+
+        <i class="stackly-user-blob stackly-user-b2"></i>
+
+        <i class="stackly-user-blob stackly-user-b3"></i>
+
+        <div class="stackly-user-grid-bg"></div>
+
+    </div>
+
+    <!-- ============ DASHBOARD ============ -->
+
+    <div class="stackly-user-dash">
+
+        <aside
+            class="stackly-user-sidebar"
+            id="sb"
+        >
+
+            <button
+                class="stackly-user-sidebar-close"
+                id="sc"
+                aria-label="Close menu"
+            >&#10005;</button>
+
+            <a
+                href="index.html"
+                class="stackly-user-slogo"
+            ><img src="./stackly.png" alt="Stackly" /></a>
+
+            <div
+                class="stackly-user-sbrand"
+            >
+                <span class="stackly-user-sbt">Stackly Foundation</span><span class="stackly-user-sbs">Donor Portal</span>
+            </div>
+
+            <div class="stackly-user-suser">
+
+                <div
+                    class="stackly-user-av"
+                    data-av
+                >U</div>
+
+                <div class="stackly-user-sinfo">
+
+                    <div
+                        class="stackly-user-sname"
+                        data-name
+                    >Donor</div>
+
+                    <div
+                        class="stackly-user-semail"
+                        data-email
+                    ></div>
+
+                    <span class="stackly-user-srole">Donor</span>
+
+                </div>
+
+            </div>
+
+            <nav id="sidenav">
+
+                <div class="stackly-user-nlabel">Dashboard</div>
+
+                <a
+                    href="#overview"
+                    data-tab="overview"
+                ><span class="stackly-user-ic">&#9632;</span> Overview</a>
+
+                <div class="stackly-user-nlabel">Giving</div>
+
+                <a
+                    href="#donate"
+                    data-tab="donate"
+                ><span class="stackly-user-ic">&hearts;</span> Donate</a>
+
+                <a
+                    href="#donations"
+                    data-tab="donations"
+                ><span class="stackly-user-ic">&#9636;</span> My donations</a>
+
+                <a
+                    href="#impact"
+                    data-tab="impact"
+                ><span class="stackly-user-ic">&#10022;</span> My impact</a>
+
+                <div class="stackly-user-nlabel">Account</div>
+
+                <a
+                    href="#profile"
+                    data-tab="profile"
+                ><span class="stackly-user-ic">&#9998;</span> My profile</a>
+
+                <div class="stackly-user-nlabel">Website</div>
+
+                <a href="index.html"><span class="stackly-user-ic">&larr;</span> Back to site</a>
+
+            </nav>
+
+            <div class="stackly-user-sfoot"><button class="stackly-user-logoutbtn" id="out">Log out</button></div>
+
+        </aside>
+
+        <div
+            class="stackly-user-backdrop"
+            id="bd"
+        ></div>
+
+        <main class="stackly-user-main">
+
+            <div class="stackly-user-topbar">
+
+                <button
+                    class="stackly-user-menu-btn"
+                    id="mb"
+                    aria-label="Open menu"
+                >&#9776;</button>
+
+                <div
+                    class="stackly-user-search"
+                >
+                    <input type="search" id="q" placeholder="Search donations, causes..." aria-label="Search" />
+                </div>
+
+                <div class="stackly-user-topbar-right">
+
+                    <button
+                        class="stackly-user-bell"
+                        id="bell"
+                        aria-label="Notifications"
+                    >&#128276;<span class="stackly-user-dot"></span></button>
+
+                    <div class="stackly-user-profile-chip">
+
+                        <div
+                            class="stackly-user-av"
+                            data-av
+                        >U</div>
+
+                        <div class="stackly-user-pinfo">
+
+                            <div
+                                class="stackly-user-pname"
+                                data-name
+                            >Donor</div>
+
+                            <div class="stackly-user-prole">Donor</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="stackly-user-pagehead">
+
+                <h1 id="pt"></h1>
+
+                <p id="ps"></p>
+
+            </div>
+
+            <section
+                class="stackly-user-tabpanel"
+                id="tab-overview"
+            >
+
+                <div class="stackly-user-stat-cards">
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-ic2"
+                            style="background:var(--ac)"
+                        >&hearts;</div>
+
+                        <div
+                            class="stackly-user-num"
+                            id="nTot"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Total given</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-ic2"
+                            style="background:var(--ac2)"
+                        >&#9636;</div>
+
+                        <div
+                            class="stackly-user-num"
+                            id="nCnt"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Donations</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-ic2"
+                            style="background:var(--teal)"
+                        >&#9786;</div>
+
+                        <div
+                            class="stackly-user-num"
+                            id="nLiv"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Lives touched (est.)</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-ic2"
+                            style="background:#ffd166"
+                        >&#9719;</div>
+
+                        <div
+                            class="stackly-user-num"
+                            id="nLast"
+                            style="font-size:1.25rem"
+                        >No gifts yet</div>
+
+                        <div class="stackly-user-lbl">Last gift</div>
+
+                    </div>
+
+                </div>
+
+                <div class="stackly-user-dgrid">
+
+                    <div class="stackly-user-panel">
+
+                        <h3>Recent donations</h3>
+
+                        <div class="stackly-user-tw">
+
+                            <table>
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>Date</th>
+
+                                        <th>Cause</th>
+
+                                        <th>Amount</th>
+
+                                        <th>Status</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="ovRows"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stackly-user-panel">
+
+                        <h3>Your account</h3>
+
+                        <div class="stackly-user-profile-panel">
+
+                            <div
+                                class="stackly-user-bigav"
+                                data-av
+                            >U</div>
+
+                            <div style="width:100%">
+
+                                <div class="stackly-user-pfield"><span>Name</span><span data-name></span></div>
+
+                                <div class="stackly-user-pfield"><span>Account type</span><span id="ovType">Donor</span></div>
+
+                                <div class="stackly-user-pfield"><span>City</span><span id="ovCity">&mdash;</span></div>
+
+                                <div class="stackly-user-pfield"><span>Member since</span><span id="ovJoin">&mdash;</span></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="stackly-user-panel">
+
+                    <h3>Campaigns you can support</h3>
+
+                    <div
+                        class="stackly-user-grid stackly-user-g3"
+                        id="ovCamps"
+                    ></div>
+
+                </div>
+
+            </section>
+
+            <section
+                class="stackly-user-tabpanel"
+                id="tab-donate"
+            >
+
+                <div class="stackly-user-dgrid">
+
+                    <div class="stackly-user-panel">
+
+                        <h3>Make a donation</h3>
+
+                        <form
+                            class="stackly-user-form"
+                            id="fDon"
+                        >
+
+                            <label>Cause<select id="dCause"></select></label>
+
+                            <label>Amount (Rs)<input type="number" id="dAmt" min="50" value="1000" required /></label>
+
+                            <div
+                                class="stackly-user-chips"
+                                id="chips"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="stackly-user-chip"
+                                    data-a="500"
+                                >500</button>
+
+                                <button
+                                    type="button"
+                                    class="stackly-user-chip"
+                                    data-a="1000"
+                                >1,000</button>
+
+                                <button
+                                    type="button"
+                                    class="stackly-user-chip"
+                                    data-a="2500"
+                                >2,500</button>
+
+                                <button
+                                    type="button"
+                                    class="stackly-user-chip"
+                                    data-a="5000"
+                                >5,000</button>
+
+                            </div>
+
+                            <div class="stackly-user-row">
+
+                                <label>Frequency<select id="dFreq"><option>One-time</option><option>Monthly</option></select></label>
+
+                                <label>Note (optional)<input id="dNote" maxlength="80" placeholder="In memory of..." /></label>
+
+                            </div>
+
+                            <button class="stackly-user-btn">Donate now</button>
+
+                            <div
+                                class="stackly-user-msg"
+                                id="dMsg"
+                            ></div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="stackly-user-panel">
+
+                        <h3>Where it goes</h3>
+
+                        <div class="stackly-user-kv"><span>Rs 30</span><b>feeds a child for a day</b></div>
+
+                        <div class="stackly-user-kv"><span>Rs 500</span><b>health check-up</b></div>
+
+                        <div class="stackly-user-kv"><span>Rs 1,200</span><b>water for a family</b></div>
+
+                        <div class="stackly-user-kv"><span>Rs 6,000</span><b>a year of school</b></div>
+
+                        <p style="margin-top:12px">94% of every gift goes to programmes. 80G receipt included.</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section
+                class="stackly-user-tabpanel"
+                id="tab-donations"
+            >
+
+                <div class="stackly-user-panel">
+
+                    <div class="stackly-user-head">
+
+                        <h3>My donations</h3>
+
+                        <button
+                            class="stackly-user-btn stackly-user-ghost stackly-user-sm"
+                            id="exp"
+                        >Download CSV</button>
+
+                    </div>
+
+                    <div class="stackly-user-tw">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Date</th>
+
+                                    <th>Receipt</th>
+
+                                    <th>Cause</th>
+
+                                    <th>Type</th>
+
+                                    <th>Amount</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="dRows"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section
+                class="stackly-user-tabpanel"
+                id="tab-impact"
+            >
+
+                <div class="stackly-user-stat-cards">
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-num"
+                            id="iM"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Meals served</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-num"
+                            id="iW"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Families with clean water</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-num"
+                            id="iS"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">School years funded</div>
+
+                    </div>
+
+                    <div class="stackly-user-stat-card">
+
+                        <div
+                            class="stackly-user-num"
+                            id="iH"
+                        >0</div>
+
+                        <div class="stackly-user-lbl">Health check-ups</div>
+
+                    </div>
+
+                </div>
+
+                <div class="stackly-user-panel">
+
+                    <h3>Your giving by cause</h3>
+
+                    <div id="byCause"></div>
+
+                    <p style="margin-top:12px">Estimates use average programme costs.</p>
+
+                </div>
+
+            </section>
+
+            <section
+                class="stackly-user-tabpanel"
+                id="tab-profile"
+            >
+
+                <div class="stackly-user-panel">
+
+                    <h3>Your profile</h3>
+
+                    <form
+                        class="stackly-user-form"
+                        id="fProf"
+                        style="max-width:480px"
+                    >
+
+                        <label>Name<input name="n" required /></label>
+
+                        <label>Phone<input name="p" type="tel" placeholder="+91" /></label>
+
+                        <label>City<input name="c" placeholder="e.g. Salem" /></label>
+
+                        <button class="stackly-user-btn">Save profile</button>
+
+                        <div
+                            class="stackly-user-msg"
+                            id="pMsg"
+                        ></div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Helpers ---------- */
+  const $ = (s, r = document) => r.querySelector(s),
+    $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const DB = {
+    get(k, d) {
+      try {
+        const v = JSON.parse(localStorage.getItem(k));
+        return v ?? d;
+      } catch (e) {
+        return d;
+      }
+    },
+    set(k, v) {
+      localStorage.setItem(k, JSON.stringify(v));
+    },
+  };
+  const norm = e =>
+    String(e || '')
+      .trim()
+      .toLowerCase();
+  const esc = s =>
+    String(s ?? '').replace(
+      /[&<>"']/g,
+      c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c],
+    );
+  const users = () => {
+    let u = DB.get('stk_users', null);
+    if (!Array.isArray(u) || !u.length) {
+      u = [{name: 'Admin', email: 'admin@stackly.org', pass: 'admin123', role: 'admin'}];
+      DB.set('stk_users', u);
+    }
+    return u;
+  };
+  const session = () => {
+    const s = DB.get('stk_session', null);
+    return s && s.email ? s : null;
+  };
+  const dons = e => DB.get('stk_don_' + norm(e), []);
+  const inr = n => 'Rs ' + Math.round(n || 0).toLocaleString('en-IN');
+  const toast = m => {
+    const t = document.createElement('div');
+    t.className = 'stackly-user-toast';
+    t.textContent = m;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('stackly-user-show'));
+    setTimeout(() => {
+      t.classList.remove('stackly-user-show');
+      setTimeout(() => t.remove(), 400);
+    }, 2600);
+  };
+  const wm = i => {
+    const s = document.createElement('span');
+    s.className = 'stackly-user-wm';
+    s.textContent = 'Stackly';
+    i.replaceWith(s);
+  };
+  $$('img[src*="stackly.png"]').forEach(i => {
+    i.onerror = () => wm(i);
+    if (i.complete && !i.naturalWidth) wm(i);
+  });
+  if (window.gsap && !matchMedia('(prefers-reduced-motion:reduce)').matches)
+    $$('.stackly-user-blob').forEach(b =>
+      gsap.to(b, {
+        x: 'random(-60,60)',
+        y: 'random(-60,60)',
+        duration: 'random(6,10)',
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+      }),
+    );
+  (() => {
+    const p = $('#pre');
+    if (!p) return;
+    document.body.style.overflow = 'hidden';
+    const n = $('#pn'),
+      b = $('.stackly-user-pb i', p);
+    let d = false;
+    const out = () => {
+      if (d) return;
+      d = true;
+      document.body.style.overflow = '';
+      window.gsap
+        ? gsap.to(p, {yPercent: -100, duration: 0.8, ease: 'power4.inOut', onComplete: () => p.remove()})
+        : p.remove();
+    };
+    if (window.gsap) {
+      const o = {v: 0};
+      gsap.to(o, {
+        v: 100,
+        duration: 1,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          n.textContent = Math.round(o.v);
+          b.style.width = o.v + '%';
+        },
+        onComplete: () => (document.readyState === 'complete' ? out() : addEventListener('load', out)),
+      });
+    }
+    setTimeout(out, 4000);
+  })();
+
+
+  /* ---------- Dashboard helpers ---------- */
+  function paint(u) {
+    $$('[data-name]').forEach(e => (e.textContent = u.name));
+    $$('[data-email]').forEach(e => (e.textContent = u.email));
+    $$('[data-av]').forEach(
+      e =>
+        (e.textContent = (u.name || 'U')
+          .trim()
+          .split(/\s+/)
+          .map(w => w[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase()),
+    );
+  }
+  function guard(role) {
+    const s = session();
+    if (!s || s.role !== role) {
+      location.replace('login.html');
+      return null;
+    }
+    const u = users().find(x => norm(x.email) === norm(s.email) && x.role === role);
+    if (!u) {
+      localStorage.removeItem('stk_session');
+      location.replace('login.html');
+      return null;
+    }
+    paint(u);
+    return u;
+  }
+  const csv = (name, rows) => {
+    const t = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([t], {type: 'text/csv'}));
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+  const camps = () => {
+    let c = DB.get('stk_camps', null);
+    if (!Array.isArray(c)) {
+      c = [
+        {id: 'c1', title: 'Wells for 40 villages', cause: 'Clean water', goal: 2500000, base: 1800000},
+        {id: 'c2', title: 'Books for 2,000 kids', cause: 'Education', goal: 1000000, base: 550000},
+        {id: 'c3', title: 'Winter kitchens', cause: 'Hot meals', goal: 1000000, base: 880000},
+        {id: 'c4', title: 'Eye-care camps', cause: 'Healthcare', goal: 600000, base: 210000},
+      ];
+      DB.set('stk_camps', c);
+    }
+    return c;
+  };
+  const CAUSES = ['Clean water', 'Education', 'Hot meals', 'Healthcare', "Women's skills", 'General fund'];
+  const allDons = () => {
+    const a = [];
+    users().forEach(u => dons(u.email).forEach(d => a.push({...d, email: norm(u.email)})));
+    return a;
+  };
+  const raised = (c, all) => c.base + all.filter(d => d.cause === c.cause).reduce((s, d) => s + d.amt, 0);
+  const campCard = (c, all, give) => {
+    const r = raised(c, all),
+      p = Math.min(100, Math.round((r / c.goal) * 100));
+    return `<div class="stackly-user-prop"><span class="stackly-user-tag">${esc(c.cause)}</span><h4>${esc(c.title)}</h4><div class="stackly-user-bar"><i style="width:${p}%"></i></div><div class="stackly-user-meta"><small>${inr(r)} of ${inr(c.goal)}</small><b>${p}%</b></div>${give ? `<button class="stackly-user-btn stackly-user-sm" style="margin-top:12px" data-give="${esc(c.cause)}">Give</button>` : ''}</div>`;
+  };
+  function tabs(T, first) {
+    const show = n => {
+      if (!T[n]) n = first;
+      $$('.stackly-user-tabpanel').forEach(p => p.classList.toggle('stackly-user-on', p.id === 'tab-' + n));
+      $$('#sidenav a[data-tab]').forEach(a => a.classList.toggle('stackly-user-active', a.dataset.tab === n));
+      $('#pt').textContent = T[n][0];
+      $('#ps').textContent = T[n][1];
+      $('#sb').classList.remove('stackly-user-open');
+      $('#bd').classList.remove('stackly-user-show');
+      $('#q').value = '';
+      filter('');
+      if (location.hash !== '#' + n) history.replaceState(null, '', '#' + n);
+      scrollTo(0, 0);
+      if (window.gsap)
+        gsap.from('#tab-' + n + ' .stat-card,#tab-' + n + ' .panel', {
+          y: 24,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.06,
+          ease: 'power2.out',
+          clearProps: 'all',
+        });
+    };
+    $$('#sidenav a[data-tab]').forEach(
+      a =>
+        (a.onclick = e => {
+          e.preventDefault();
+          show(a.dataset.tab);
+        }),
+    );
+    window.show = show;
+    show(location.hash.slice(1) || first);
+  }
+  function filter(v) {
+    v = norm(v);
+    $$(
+      '.stackly-user-tabpanel.stackly-user-on tbody tr,.stackly-user-tabpanel.stackly-user-on .stackly-user-prop',
+    ).forEach(r => (r.style.display = !v || norm(r.textContent).includes(v) ? '' : 'none'));
+  }
+  $('#q').oninput = e => filter(e.target.value);
+  $('#mb').onclick = () => {
+    $('#sb').classList.add('stackly-user-open');
+    $('#bd').classList.add('stackly-user-show');
+  };
+  $('#sc').onclick = $('#bd').onclick = () => {
+    $('#sb').classList.remove('stackly-user-open');
+    $('#bd').classList.remove('stackly-user-show');
+  };
+  $('#out').onclick = () => {
+    localStorage.removeItem('stk_session');
+    location.href = 'login.html';
+  };
+  $('#bell').onclick = () => toast('No new notifications.');
+  const U = guard('user');
+  if (U) {
+    const T = {
+      overview: [
+        'Hello, ' + U.name.split(' ')[0],
+        'Here is a summary of your giving and the causes you can back next.',
+      ],
+      donate: ['Donate', 'Choose a cause and give in a few taps.'],
+      donations: ['My donations', 'Every gift, with its receipt number.'],
+      impact: ['My impact', 'What your gifts have made possible.'],
+      profile: ['My profile', 'Keep your details up to date.'],
+    };
+    const sel = $('#dCause');
+    sel.innerHTML = CAUSES.map(c => `<option>${c}</option>`).join('');
+    function render() {
+      const d = dons(U.email),
+        tot = d.reduce((a, b) => a + b.amt, 0),
+        all = allDons();
+      $('#nTot').textContent = inr(tot);
+      $('#nCnt').textContent = d.length;
+      $('#nLiv').textContent = Math.round(tot / 150);
+      $('#nLast').textContent = d.length ? d[d.length - 1].date : 'No gifts yet';
+      const empty = n =>
+        `<tr><td colspan="${n}" class="stackly-user-empty">No donations yet. <a href="#donate" onclick="show('donate');return false">Make your first gift</a>.</td></tr>`;
+      $('#ovRows').innerHTML = d.length
+        ? d
+            .slice(-5)
+            .reverse()
+            .map(
+              x =>
+                `<tr><td>${esc(x.date)}</td><td>${esc(x.cause)}</td><td>${inr(x.amt)}</td><td><span class="stackly-user-status stackly-user-ok">Received</span></td></tr>`,
+            )
+            .join('')
+        : empty(4);
+      $('#dRows').innerHTML = d.length
+        ? d
+            .slice()
+            .reverse()
+            .map(
+              x =>
+                `<tr><td>${esc(x.date)}</td><td>${esc(x.id || '-')}</td><td>${esc(x.cause)}</td><td>${esc(x.freq || 'One-time')}</td><td>${inr(x.amt)}</td></tr>`,
+            )
+            .join('')
+        : empty(5);
+      $('#ovCamps').innerHTML = camps()
+        .slice(0, 3)
+        .map(c => campCard(c, all, true))
+        .join('');
+      const by = {};
+      d.forEach(x => (by[x.cause] = (by[x.cause] || 0) + x.amt));
+      const sum = c => by[c] || 0;
+      $('#byCause').innerHTML = Object.keys(by).length
+        ? Object.entries(by)
+            .map(
+              ([k, v]) =>
+                `<b>${esc(k)}</b> <small>${inr(v)}</small><div class="stackly-user-bar"><i style="width:${Math.round((v / tot) * 100)}%"></i></div>`,
+            )
+            .join('')
+        : '<p>Give to a cause to see your breakdown here.</p>';
+      $('#iM').textContent = Math.floor(sum('Hot meals') / 30).toLocaleString();
+      $('#iW').textContent = Math.floor(sum('Clean water') / 1200);
+      $('#iS').textContent = Math.floor(sum('Education') / 6000);
+      $('#iH').textContent = Math.floor(sum('Healthcare') / 500);
+      $('#ovType').textContent = U.type || 'Donor';
+      $('#ovCity').textContent = U.city || '\u2014';
+      $('#ovJoin').textContent = U.joined || '\u2014';
+      const f = $('#fProf');
+      const E = f.elements;
+      E.n.value = U.name;
+      E.p.value = U.phone || '';
+      E.c.value = U.city || '';
+    }
+    tabs(T, 'overview');
+    render();
+    document.addEventListener('click', e => {
+      const g = e.target.closest('[data-give]');
+      if (g) {
+        show('donate');
+        sel.value = g.dataset.give;
+      }
+    });
+    $$('#chips .stackly-user-chip').forEach(c => (c.onclick = () => ($('#dAmt').value = c.dataset.a)));
+    $('#fDon').onsubmit = e => {
+      e.preventDefault();
+      const a = +$('#dAmt').value;
+      if (!(a >= 50)) return ($('#dMsg').textContent = 'Minimum gift is Rs 50.');
+      const id = 'STK-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
+        d = dons(U.email);
+      d.push({
+        id,
+        cause: sel.value,
+        amt: a,
+        freq: $('#dFreq').value,
+        note: $('#dNote').value.trim(),
+        date: new Date().toLocaleDateString(),
+      });
+      DB.set('stk_don_' + norm(U.email), d);
+      $('#dMsg').textContent = '';
+      e.target.reset();
+      sel.innerHTML = CAUSES.map(c => `<option>${c}</option>`).join('');
+      render();
+      toast('Thank you! Receipt ' + id);
+      show('donations');
+    };
+    $('#exp').onclick = () => {
+      const d = dons(U.email);
+      if (!d.length) return toast('No donations to export yet.');
+      csv('my-donations.csv', [
+        ['Date', 'Receipt', 'Cause', 'Type', 'Amount (Rs)'],
+        ...d.map(x => [x.date, x.id || '', x.cause, x.freq || 'One-time', x.amt]),
+      ]);
+    };
+    $('#fProf').onsubmit = e => {
+      e.preventDefault();
+      const f = e.target,
+        L = users(),
+        i = L.findIndex(x => norm(x.email) === norm(U.email));
+      if (i < 0) return;
+      const E = f.elements;
+      L[i].name = E.n.value.trim() || L[i].name;
+      L[i].phone = E.p.value.trim();
+      L[i].city = E.c.value.trim();
+      DB.set('stk_users', L);
+      const s = session();
+      s.name = L[i].name;
+      DB.set('stk_session', s);
+      Object.assign(U, L[i]);
+      paint(U);
+      render();
+      $('#pt').textContent = T.profile[0];
+      $('#pMsg').textContent = 'Profile saved.';
+      setTimeout(() => ($('#pMsg').textContent = ''), 2500);
+    };
+  }
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+  (() => {
+    const all = [];
+    function close() {
+      all.forEach(d => d.classList.remove('stackly-user-open', 'stackly-user-up'));
+    }
+    document.querySelectorAll('.stackly-user-form select').forEach(sel => {
+      const dd = document.createElement('div');
+      dd.className = 'stackly-user-dd';
+      dd.innerHTML =
+        '<button type="button" class="stackly-user-ddb" aria-haspopup="listbox" aria-expanded="false"><span></span><i aria-hidden="true">&#9660;</i></button><ul class="stackly-user-ddl" role="listbox"></ul>';
+      sel.classList.add('stackly-user-ddnative');
+      sel.tabIndex = -1;
+      sel.setAttribute('aria-hidden', 'true');
+      sel.after(dd);
+      all.push(dd);
+      const btn = dd.querySelector('.stackly-user-ddb'),
+        lbl = btn.firstElementChild,
+        ul = dd.querySelector('.stackly-user-ddl');
+      let hi = -1;
+      const build = () => {
+        ul.innerHTML = [...sel.options]
+          .map(
+            (o, i) =>
+              '<li role="option" data-i="' +
+              i +
+              '">' +
+              o.text.replace(/&/g, '&amp;').replace(/</g, '&lt;') +
+              '</li>',
+          )
+          .join('');
+        sync();
+      };
+      const sync = () => {
+        lbl.textContent = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+        [...ul.children].forEach((li, i) => li.setAttribute('aria-selected', i === sel.selectedIndex));
+      };
+      const d = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+      Object.defineProperty(sel, 'value', {
+        get() {
+          return d.get.call(sel);
+        },
+        set(v) {
+          d.set.call(sel, v);
+          sync();
+        },
+      });
+      const setHi = i => {
+        hi = i;
+        [...ul.children].forEach((li, k) => li.classList.toggle('stackly-user-hl', k === i));
+        const li = ul.children[i];
+        if (li) li.scrollIntoView({block: 'nearest'});
+      };
+      const place = () => {
+        dd.classList.remove('stackly-user-up');
+        const r = btn.getBoundingClientRect(),
+          below = innerHeight - r.bottom - 16,
+          above = r.top - 16,
+          need = Math.min(240, ul.scrollHeight + 12);
+        const up = below < need && above > below;
+        dd.classList.toggle('stackly-user-up', up);
+        ul.style.maxHeight = Math.max(120, Math.min(240, up ? above : below)) + 'px';
+      };
+      const open = () => {
+        close();
+        dd.classList.add('stackly-user-open');
+        btn.setAttribute('aria-expanded', 'true');
+        place();
+        setHi(sel.selectedIndex);
+      };
+      const pick = i => {
+        if (i < 0) return;
+        sel.selectedIndex = i;
+        sync();
+        sel.dispatchEvent(new Event('change', {bubbles: true}));
+        close();
+        btn.setAttribute('aria-expanded', 'false');
+        btn.focus();
+      };
+      dd.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const li = e.target.closest('li');
+        if (li) return pick(+li.dataset.i);
+        if (e.target.closest('.stackly-user-ddb'))
+          dd.classList.contains('stackly-user-open') ? close() : open();
+      });
+      btn.addEventListener('keydown', e => {
+        const n = sel.options.length,
+          o = dd.classList.contains('stackly-user-open');
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (!o) return open();
+          setHi(Math.max(0, Math.min(n - 1, hi + (e.key === 'ArrowDown' ? 1 : -1))));
+        } else if ((e.key === 'Enter' || e.key === ' ') && o) {
+          e.preventDefault();
+          pick(hi);
+        } else if (e.key === 'Escape' || e.key === 'Tab') {
+          close();
+        }
+      });
+      sel.addEventListener('change', sync);
+      if (sel.form) sel.form.addEventListener('reset', () => setTimeout(sync));
+      build();
+    });
+    document.addEventListener('click', close);
+    addEventListener('resize', close);
+  })();
+})();
+</script>
+
+</body>
+</html>
